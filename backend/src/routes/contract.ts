@@ -3,8 +3,42 @@ import {isAddress} from "ethers";
 import { fetchContractFromEtherscan } from "../services/etherscan.js";
 import { parseABI } from "../services/parser.js";
 import { analyzeAccessControl } from "../services/analyzer.js";
+import { detectUpgradeability } from "../services/upgradeAnalyzer.js";
+import { analyzeRisks } from "../services/riskAnalyzer.js";
 
 const router: Router = Router();
+
+function containsBusinessLogic(abi: any[]) {
+  const functionNames = abi
+    .filter((i) => i.type === "function")
+    .map((f) => f.name);
+
+  return (
+    functionNames.includes("transfer") ||
+    functionNames.includes("approve") ||
+    functionNames.includes("mint") ||
+    functionNames.includes("balanceOf")
+  );
+}
+
+
+async function resolveFinalImplementation(address: string) {
+  let current = await fetchContractFromEtherscan(address);
+  if (!current) return null;
+
+  while (current.proxy && current.implementations) {
+    const next = await fetchContractFromEtherscan(current.implementations);
+    if (!next) break;
+
+    if (containsBusinessLogic(next.abi)) {
+      return next;
+    }
+
+    current = next;
+  }
+
+  return current;
+}
 
 router.get("/:address", async(req , res ) => {
     try {
@@ -14,7 +48,7 @@ router.get("/:address", async(req , res ) => {
             return res.status(404).json("Invalid Ethereum Address");
         }
 
-        const contractData = await fetchContractFromEtherscan(address);
+        let contractData = await resolveFinalImplementation(address);
 
         if(!contractData) {
             return res.status(404).json("Contract not found or not verfied");
@@ -24,11 +58,15 @@ router.get("/:address", async(req , res ) => {
 
         const functions = parseABI(abi);
         const accessControl = analyzeAccessControl(abi, sourceCode);
+        const upgradeability = detectUpgradeability(abi, sourceCode, contractData.proxy)
+        const riskAnalysis = analyzeRisks(sourceCode);
 
         return res.json({
             name: contractName,
             functions,
-            accessControl
+            accessControl,
+            upgradeability,
+            riskAnalysis
         })
 
     }catch(e) {
