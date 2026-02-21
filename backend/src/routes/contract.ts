@@ -45,7 +45,7 @@ router.get("/:address", async(req , res ) => {
         const { address } = req.params;
 
         if(!isAddress(address)) {
-            return res.status(404).json("Invalid Ethereum Address");
+            return res.status(400).json("Invalid Ethereum Address");
         }
 
         let contractData = await resolveFinalImplementation(address);
