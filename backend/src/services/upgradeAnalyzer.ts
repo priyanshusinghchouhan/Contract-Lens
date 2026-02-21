@@ -1,12 +1,7 @@
-export type UpgradePattern =
-  | "Transparent"
-  | "UUPS"
-  | "Beacon"
-  | "Unknown"
-  | null;
+import { ABI, ABIFunction } from "../types/abi.js";
 
 export function detectUpgradeability(
-  abi: any[],
+  abi: ABI,
   sourceCode: string,
   proxyFlag: boolean,
 ) {
@@ -19,7 +14,7 @@ export function detectUpgradeability(
   }
 
   const functionNames = abi
-    .filter((item) => item.type === "function")
+    .filter((item): item is ABIFunction => item.type === "function")
     .map((fn) => fn.name);
 
   const usesDelegatecall = sourceCode.includes("delegatecall");
