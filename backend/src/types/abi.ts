@@ -10,17 +10,26 @@ export interface ABIParameter {
     name?: string;
   }
   
-  export interface ABIFunction {
+export interface ABIFunction {
     type: "function";
     name: string;
     stateMutability: "pure" | "view" | "nonpayable" | "payable";
     inputs?: ABIParameter[];
     outputs?: ABIParameter[];
-  }
+}
   
-  export interface ABIItem {
-    type: string;
-    name?: string;
-  }
+export interface ABIEvent {
+    type: "event";
+    name: string;
+    inputs?: ABIParameter[];
+}
   
-  export type ABI = ABIItem[];
+export interface ABIConstructor {
+    type: "constructor";
+    inputs?: ABIParameter[];
+    stateMutability?: "nonpayable" | "payable";
+}
+  
+export type ABIItem = ABIFunction | ABIEvent | ABIConstructor;
+  
+export type ABI = ABIItem[];
