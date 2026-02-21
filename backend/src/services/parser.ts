@@ -1,10 +1,12 @@
-export function parseABI(abi: any[]) {
+import { ABI, ABIFunction } from "../types/abi.js";
+
+export function parseABI(abi: ABI) {
     if(!Array.isArray(abi)){
         return []
     }
 
     return abi
-        .filter((item) => item.type === "function")
+        .filter((item): item is ABIFunction => item.type === "function")
         .map((fn) => ({
             name: fn.name,
             stateMutability: fn.stateMutability,
