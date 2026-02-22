@@ -5,12 +5,14 @@ import { parseABI } from "../services/parser.js";
 import { analyzeAccessControl } from "../services/analyzer.js";
 import { detectUpgradeability } from "../services/upgradeAnalyzer.js";
 import { analyzeRisks } from "../services/riskAnalyzer.js";
+import { ABI, ABIFunction } from "../types/abi.js";
+import { calculateRiskScore } from "../services/riskScoring.js";
 
 const router: Router = Router();
 
-function containsBusinessLogic(abi: any[]) {
+function containsBusinessLogic(abi: ABI) {
   const functionNames = abi
-    .filter((i) => i.type === "function")
+    .filter((item):item is ABIFunction => item.type === "function")
     .map((f) => f.name);
 
   return (
@@ -45,7 +47,7 @@ router.get("/:address", async(req , res ) => {
         const { address } = req.params;
 
         if(!isAddress(address)) {
-            return res.status(400).json("Invalid Ethereum Address");
+            return res.status(400).json({error : "Invalid Ethereum Address"});
         }
 
         let contractData = await resolveFinalImplementation(address);
@@ -60,13 +62,19 @@ router.get("/:address", async(req , res ) => {
         const accessControl = analyzeAccessControl(abi, sourceCode);
         const upgradeability = detectUpgradeability(abi, sourceCode, contractData.proxy)
         const riskAnalysis = analyzeRisks(sourceCode);
+        const {score, level, breakdown } = calculateRiskScore(riskAnalysis);
 
         return res.json({
             name: contractName,
             functions,
             accessControl,
             upgradeability,
-            riskAnalysis
+            riskAnalysis,
+            riskScore: {
+              score,
+              level,
+              breakdown
+            }
         })
 
     }catch(e) {
