@@ -1,4 +1,6 @@
-export function analyzeAccessControl(abi: any[], sourceCode: string) {
+import { ABI } from "../types/abi.js";
+
+export function analyzeAccessControl(abi: ABI, sourceCode: string) {
     const functionNames = abi
         .filter((item) => item.type === "function")
         .map((fn) => fn.name);

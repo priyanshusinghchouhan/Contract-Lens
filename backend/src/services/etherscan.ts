@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ABI } from "../types/abi.js";
 
 const BASE_URL = "https://api.etherscan.io/v2/api";
 
@@ -32,7 +33,7 @@ export async function fetchContractFromEtherscan(address: string) {
 
     return {
       contractName: result.ContractName,
-      abi: JSON.parse(result.ABI),
+      abi: JSON.parse(result.ABI) as ABI,
       sourceCode: result.SourceCode,
       compilerVersion: result.CompilerVersion,
       proxy: result.Proxy === "1",
