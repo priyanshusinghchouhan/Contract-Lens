@@ -1,11 +1,4 @@
-export interface RiskAnalysis {
-  usesDelegatecall: boolean;
-  usesLowLevelCall: boolean;
-  usesTxOrigin: boolean;
-  usesSelfDestruct: boolean;
-  hasReentrancyGuard: boolean;
-  externalCallCount: number;
-}
+import { RiskAnalysis } from "../types/riskAnalysis.js";
 
 export function analyzeRisks(sourceCode: string): RiskAnalysis {
   if (!sourceCode) {
