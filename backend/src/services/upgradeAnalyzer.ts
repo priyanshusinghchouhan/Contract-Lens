@@ -9,7 +9,7 @@ export function detectUpgradeability(
     return {
       isProxy: false,
       pattern: null,
-      usesDelegateCall: false,
+      usesDelegatecall: false,
     };
   }
 
