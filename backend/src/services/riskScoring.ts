@@ -1,9 +1,17 @@
-import { RiskScoreResult } from "../types/riskAnalysis.js";
+import { RiskBreakdown, RiskScoreResult } from "../types/riskAnalysis.js";
 import { RiskAnalysis } from "../types/riskAnalysis.js";
 
 export function calculateRiskScore(risks: RiskAnalysis): RiskScoreResult {
   let score = 0;
-  const breakdown: Record<string, number> = {};
+
+  const breakdown: RiskBreakdown = {
+    selfDestruct: 0,
+    delegatecall: 0,
+    txOrigin: 0,
+    lowLevelCall: 0,
+    externalCallDensity: 0,
+    reentrancyMitigation: 0,
+  };
 
   if (risks.usesSelfDestruct) {
     score += 3;
