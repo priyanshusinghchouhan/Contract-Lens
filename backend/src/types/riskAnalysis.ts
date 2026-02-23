@@ -7,8 +7,17 @@ export interface RiskAnalysis {
   externalCallCount: number;
 }
 
+export interface RiskBreakdown {
+  selfDestruct: number;
+  delegatecall: number;
+  txOrigin: number;
+  lowLevelCall: number;
+  externalCallDensity: number;
+  reentrancyMitigation: number;
+}
+
 export interface RiskScoreResult {
   score: number;
   level: "Low" | "Medium" | "High";
-  breakdown: Record<string, number>;
+  breakdown: RiskBreakdown;
 }
