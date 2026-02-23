@@ -3,10 +3,11 @@ import {isAddress} from "ethers";
 import { fetchContractFromEtherscan } from "../services/etherscan.js";
 import { parseABI } from "../services/parser.js";
 import { analyzeAccessControl } from "../services/analyzer.js";
-import { detectUpgradeability } from "../services/upgradeAnalyzer.js";
+import { detectUpgradeability } from "../services/detectUpgradeability.js";
 import { analyzeRisks } from "../services/riskAnalyzer.js";
 import { ABI, ABIFunction } from "../types/abi.js";
 import { calculateRiskScore } from "../services/riskScoring.js";
+import { explainContract } from "../services/claude.js";
 
 const router: Router = Router();
 
@@ -64,6 +65,19 @@ router.get("/:address", async(req , res ) => {
         const riskAnalysis = analyzeRisks(sourceCode);
         const {score, level, breakdown } = calculateRiskScore(riskAnalysis);
 
+        const explanation = await explainContract({
+          contractName,
+          functions,
+          accessControl,
+          upgradeability,
+          riskAnalysis,
+          riskScore: {
+            score,
+            level,
+            breakdown
+          }
+        })
+
         return res.json({
             name: contractName,
             functions,
@@ -74,7 +88,8 @@ router.get("/:address", async(req , res ) => {
               score,
               level,
               breakdown
-            }
+            },
+            explanation
         })
 
     }catch(e) {
