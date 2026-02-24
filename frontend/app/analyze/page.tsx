@@ -6,6 +6,7 @@ import axios from "axios";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { AnimatedGrid } from "@/components/landing/animated-grid";
+import { useRef } from "react";
 
 type RiskScore = {
   score: number;
@@ -52,8 +53,6 @@ type AnalyzeResponse = {
   riskScore: RiskScore;
 };
 
-
-
 const API_BASE_URL =process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function AnalyzePage() {
@@ -63,24 +62,36 @@ export default function AnalyzePage() {
   const [error, setError] = useState<string | null>(null);
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
-  const [displayedText, setDisplayedText] = useState<string | null>(null);
+  const [displayedText, setDisplayedText] = useState("");
+  const explanationRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if(!aiExplanation) return;
+    if (!explanationRef.current) return;
+  
+    window.scrollTo({
+      top: explanationRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [displayedText]);
 
-    let i = 0;
+  useEffect(() => {
+    if (!aiExplanation) return;
+  
+    let currentLength = 0;
+  
     const interval = setInterval(() => {
-      setDisplayedText((prev) => prev ? prev + aiExplanation[i] : aiExplanation[i]);
-      i++;
-
-      if(i >= aiExplanation.length) {
+      currentLength++;
+  
+      if (currentLength > aiExplanation.length) {
         clearInterval(interval);
+        return;
       }
-    }, 20);
-
+  
+      setDisplayedText(aiExplanation.slice(0, currentLength));
+    }, 15);
+  
     return () => clearInterval(interval);
   }, [aiExplanation]);
-
 
   async function handleAnalyze() {
     const trimmed = address.trim();
@@ -93,7 +104,7 @@ export default function AnalyzePage() {
     setError(null);
     setData(null);
     setAiExplanation(null);
-    setDisplayedText(null);
+    setDisplayedText("");
     try {
       const res = await axios.get<AnalyzeResponse>(
         `${API_BASE_URL}/api/contract/${trimmed}`,
@@ -138,7 +149,7 @@ export default function AnalyzePage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-black text-white">
+    <main className="relative min-h-screen bg-black text-white ">
       <div className="pointer-events-none absolute inset-0 z-0">
         <AnimatedGrid />
       </div>
@@ -256,14 +267,14 @@ export default function AnalyzePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 max-h-59 overflow-auto">
+            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 max-h-59 overflow-auto hide-scrollbar">
               <h2 className="text-lg font-semibold">Risk breakdown</h2>
-              <p className="mt-1 text-xs text-zinc-500">
+              <p className="mt-1 text-xs text-zinc-500 ">
                 Individual dimensions that contribute to the overall score.
               </p>
 
               {data ? (
-                <ul className="mt-4 space-y-2 text-sm text-zinc-300">
+                <ul className="mt-4 space-y-2 text-sm text-zinc-300 ">
                   {Object.entries(data.riskScore.breakdown).map(
                     ([key, value]: any) => (
                       <li key={key} className="flex justify-between">
@@ -276,7 +287,7 @@ export default function AnalyzePage() {
                   )}
                 </ul>
               ) : (
-                <div className="mt-4 text-sm text-zinc-500">
+                <div className="mt-4 text-sm text-zinc-500 overflow-auto hide-scrollbar">
                   <ul className=" list-disc mt-4 space-y-2 text-sm text-zinc-300">
                     <li>Breaks down the individual security signals that influence the overall risk score.</li>
                 <li>
@@ -318,7 +329,7 @@ export default function AnalyzePage() {
             </div>
 
             {aiExplanation ? (
-              <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-4 text-sm text-zinc-200 whitespace-pre-wrap">
+              <div ref={explanationRef} className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-4 text-sm text-zinc-200 whitespace-pre-wrap">
                 {displayedText}
               </div>
             ) : (
