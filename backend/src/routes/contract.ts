@@ -65,19 +65,6 @@ router.get("/:address", async(req , res ) => {
         const riskAnalysis = analyzeRisks(sourceCode);
         const {score, level, breakdown } = calculateRiskScore(riskAnalysis);
 
-        const explanation = await explainContract({
-          contractName,
-          functions,
-          accessControl,
-          upgradeability,
-          riskAnalysis,
-          riskScore: {
-            score,
-            level,
-            breakdown
-          }
-        })
-
         return res.json({
             name: contractName,
             functions,
@@ -89,13 +76,59 @@ router.get("/:address", async(req , res ) => {
               level,
               breakdown
             },
-            explanation
         })
 
     }catch(e) {
         console.log(e);
         return res.status(500).json({e: "Internal Server Error"});
     }
+});
+
+router.post("/:address/explain", async (req, res) => {
+  try {
+    const { address } = req.params;
+
+    if (!isAddress(address)) {
+      return res.status(400).json({ error: "Invalid Ethereum Address" });
+    }
+
+    let contractData = await resolveFinalImplementation(address);
+
+    if (!contractData) {
+      return res.status(404).json({ error: "Contract not found or not verified" });
+    }
+
+    const { contractName, abi, sourceCode } = contractData;
+
+    const functions = parseABI(abi);
+    const accessControl = analyzeAccessControl(abi, sourceCode);
+    const upgradeability = detectUpgradeability(
+      abi,
+      sourceCode,
+      contractData.proxy
+    );
+    const riskAnalysis = analyzeRisks(sourceCode);
+    const { score, level, breakdown } = calculateRiskScore(riskAnalysis);
+
+    const explanation = await explainContract({
+      contractName,
+      functions,
+      accessControl,
+      upgradeability,
+      riskAnalysis,
+      riskScore: {
+        score,
+        level,
+        breakdown,
+      },
+    });
+
+    return res.json({ explanation });
+
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 export default router;
