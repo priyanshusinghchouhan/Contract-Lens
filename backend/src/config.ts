@@ -24,17 +24,11 @@ export const SUPPORTED_CHAINS: Record<number, SupportedChain> = {
     apiUrl: "https://api.etherscan.io/v2/api",
     apiKeyEnv: "ARBISCAN_API_KEY",
   },
-  10: {
+  59144: {
     chainId: 10,
-    name: "Optimism",
+    name: "Linea",
     apiUrl: "https://api.etherscan.io/v2/api",
-    apiKeyEnv: "OPTIMISMSCAN_API_KEY",
-  },
-  8453: {
-    chainId: 8453,
-    name: "Base",
-    apiUrl: "https://api.etherscan.io/v2/api",
-    apiKeyEnv: "BASESCAN_API_KEY",
+    apiKeyEnv: "LINEA_API_KEY",
   },
   137: {
     chainId: 137,
