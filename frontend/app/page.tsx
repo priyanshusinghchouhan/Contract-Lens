@@ -8,11 +8,11 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { CTASection } from "@/components/landing/cta-section";
 
 export const metadata: Metadata = {
-  title: "Deteministic Analysis of Smart Contracts",
+  title: "ContractLens - Deteministic Analysis of Smart Contracts",
   description:
     "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
   openGraph: {
-    title: "Deteministic Analysis of Smart Contracts",
+    title: "ContractLens - Deteministic Analysis of Smart Contracts",
     description:
       "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
     type: "website",
