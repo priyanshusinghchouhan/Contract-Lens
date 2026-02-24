@@ -42,6 +42,15 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+:root {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:root::-webkit-scrollbar {
+  display: none;
+}
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -179,4 +188,15 @@
   .text-gradient {
     @apply bg-gradient-to-r from-white via-white to-zinc-400 bg-clip-text text-transparent;
   }
+
+  /* Hide scrollbar for Chrome, Safari */
+ .hide-scrollbar::-webkit-scrollbar {
+   display: none;
+ }
+
+/* Hide scrollbar for Firefox */
+ .hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+ }
 }
