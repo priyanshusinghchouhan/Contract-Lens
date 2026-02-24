@@ -55,26 +55,25 @@ export async function explainContract(
     Your task:
     1. Explain what this contract does in 3-4 sentences (think: what would you tell a friend?)
     2. List 3-4 key features (what can users do with it?)
-    3. Explain the risk score in simple terms (why is it ${riskScore.level.toLowerCase()} risk?)
+    3. Explain the risk score in simple terms (why is it ${riskScore.level ? riskScore.level.toLowerCase() : ""} risk?)
 
     Rules:
     - Use simple words, no jargon
     - If you must use technical terms (like "reentrancy"), explain them briefly
     - Be honest about risks but not alarmist
     - Keep response under 200 words total
-    - Format: Use "**" for bold headers only
+    - Do NOT use asterisks (* or **).
     - Use clear, professional language.
     - Avoid analogies (e.g., "like eBay").
     - Avoid marketing tone.
     - CRITICAL: Your explanation must be understandable by someone who has never written a smart contract. Imagine explaining to a friend who just heard about blockchain yesterday.
 
     Example good explanation:
-    "**What it does:** This is a token swap contract...
-    **Key features:** • Swap tokens • Add liquidity...
-    **Risk level:** Low risk because..."
+    "What it does: This is a token swap contract...
+    Key features: • Swap tokens • Add liquidity...
+    Risk level: Low risk because..."
 
     Keep your response under 250-300 words. Be direct and clear. Use plain English, not jargon.`;
-
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-4-20250514",
@@ -82,10 +81,13 @@ export async function explainContract(
       messages: [{ role: "user", content: prompt }],
     });
 
-    const responseText =
+    let responseText =
       message.content[0]?.type === "text"
         ? message.content[0].text
         : "Unable to generate explanation";
+
+    responseText = responseText
+      .replace(/\*\*([^*]*)\*\*/g, "$1")
 
     return responseText;
   } catch (error) {
