@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {isAddress} from "ethers";
-import { fetchContractFromEtherscan } from "../services/etherscan.js";
+import { fetchContractFromExplorer } from "../services/fetchContractFromExplorer.js";
 import { parseABI } from "../services/parser.js";
 import { analyzeAccessControl } from "../services/analyzer.js";
 import { detectUpgradeability } from "../services/detectUpgradeability.js";
@@ -8,6 +8,7 @@ import { analyzeRisks } from "../services/riskAnalyzer.js";
 import { ABI, ABIFunction } from "../types/abi.js";
 import { calculateRiskScore } from "../services/riskScoring.js";
 import { explainContract } from "../services/claude.js";
+import { detectChainAndFetch } from "../services/detectChainAndFetch.js";
 
 const router: Router = Router();
 
@@ -25,12 +26,12 @@ function containsBusinessLogic(abi: ABI) {
 }
 
 
-async function resolveFinalImplementation(address: string) {
-  let current = await fetchContractFromEtherscan(address);
+async function resolveFinalImplementation(address: string, chainId: number) {
+  let current = await fetchContractFromExplorer(address, chainId);
   if (!current) return null;
 
   while (current.proxy && current.implementations) {
-    const next = await fetchContractFromEtherscan(current.implementations);
+    const next = await fetchContractFromExplorer(current.implementations, current.chainId);
     if (!next) break;
 
     if (containsBusinessLogic(next.abi)) {
@@ -43,45 +44,61 @@ async function resolveFinalImplementation(address: string) {
   return current;
 }
 
-router.get("/:address", async(req , res ) => {
-    try {
-        const { address } = req.params;
 
-        if(!isAddress(address)) {
-            return res.status(400).json({error : "Invalid Ethereum Address"});
-        }
 
-        let contractData = await resolveFinalImplementation(address);
+router.get("/:address", async (req, res) => {
+  try {
+    const { address } = req.params;
 
-        if(!contractData) {
-            return res.status(404).json("Contract not found or not verfied");
-        }
-
-        const { contractName, abi, sourceCode } = contractData;
-
-        const functions = parseABI(abi);
-        const accessControl = analyzeAccessControl(abi, sourceCode);
-        const upgradeability = detectUpgradeability(abi, sourceCode, contractData.proxy)
-        const riskAnalysis = analyzeRisks(sourceCode);
-        const {score, level, breakdown } = calculateRiskScore(riskAnalysis);
-
-        return res.json({
-            name: contractName,
-            functions,
-            accessControl,
-            upgradeability,
-            riskAnalysis,
-            riskScore: {
-              score,
-              level,
-              breakdown
-            },
-        })
-
-    }catch(e) {
-        console.log(e);
-        return res.status(500).json({e: "Internal Server Error"});
+    if (!isAddress(address)) {
+      return res.status(400).json({ error: "Invalid Ethereum address" });
     }
+
+    const detected = await detectChainAndFetch(address);
+    if (!detected) return 404;
+
+    console.log("chain", detected.chainId);
+
+    const contractData = await resolveFinalImplementation(
+      address,
+      detected.chainId
+    );
+
+    if (!contractData) {
+      return res.status(404).json({
+        error: "Contract not found on supported chains or not verified",
+      });
+    }
+
+    const { contractName, abi, sourceCode, chainId } = contractData;
+
+    const functions = parseABI(abi);
+    const accessControl = analyzeAccessControl(abi, sourceCode);
+    const upgradeability = detectUpgradeability(
+      abi,
+      sourceCode,
+      contractData.proxy
+    );
+    const riskAnalysis = analyzeRisks(sourceCode);
+    const { score, level, breakdown } = calculateRiskScore(riskAnalysis);
+
+    return res.json({
+      name: contractName,
+      chainId,
+      functions,
+      accessControl,
+      upgradeability,
+      riskAnalysis,
+      riskScore: {
+        score,
+        level,
+        breakdown,
+      },
+    });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.post("/:address/explain", async (req, res) => {
@@ -92,7 +109,13 @@ router.post("/:address/explain", async (req, res) => {
       return res.status(400).json({ error: "Invalid Ethereum Address" });
     }
 
-    let contractData = await resolveFinalImplementation(address);
+    const detected = await detectChainAndFetch(address);
+    if (!detected) return 404;
+
+    const contractData = await resolveFinalImplementation(
+      address,
+      detected.chainId
+    );
 
     if (!contractData) {
       return res.status(404).json({ error: "Contract not found or not verified" });
