@@ -5,7 +5,6 @@ import { HeroSection } from '@/components/landing/hero-section'
 import { ProblemSection } from '@/components/landing/problem-section'
 import { SolutionSection } from '@/components/landing/solution-section'
 import { HowItWorks } from '@/components/landing/how-it-works'
-import { TrustSection } from '@/components/landing/trust-section'
 import { CTASection } from '@/components/landing/cta-section'
 
 export const metadata: Metadata = {
@@ -33,8 +32,9 @@ export default function Home() {
         <section id="features">
           <ProblemSection />
           <SolutionSection />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[30rem] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.22)_0%,rgba(220,38,38,0.12)_36%,rgba(220,38,38,0.05)_55%,rgba(0,0,0,0)_78%)] blur-3xl" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent via-black/40 to-black" />
           <HowItWorks />
-          <TrustSection />
           <CTASection />
         </section>
 
