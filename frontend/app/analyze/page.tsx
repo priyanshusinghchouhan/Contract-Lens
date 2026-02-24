@@ -22,12 +22,10 @@ type AnalyzeResponse = {
   riskScore: RiskScore;
 };
 
-// Prefer env var, fall back to local backend
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5173";
+const API_BASE_URL =process.env.NEXT_PUBLIC_API_BASE_URL;
+console.log(API_BASE_URL);
 
 export default function AnalyzePage() {
-  // -------- State --------
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<AnalyzeResponse | null>(null);
@@ -35,7 +33,6 @@ export default function AnalyzePage() {
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
 
-  // -------- Handlers --------
 
   async function handleAnalyze() {
     const trimmed = address.trim();
@@ -94,7 +91,6 @@ export default function AnalyzePage() {
 
   return (
     <main className="relative min-h-screen bg-black text-white">
-      {/* Background grid to match landing page */}
       <div className="pointer-events-none absolute inset-0 z-0">
         <AnimatedGrid />
       </div>
@@ -103,9 +99,7 @@ export default function AnalyzePage() {
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
         <section className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
-          {/* Left: Input + high-level context */}
           <div className="space-y-8">
-            {/* Page title */}
             <div className="space-y-3">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Analyze a Smart Contract
@@ -117,7 +111,6 @@ export default function AnalyzePage() {
               </p>
             </div>
 
-            {/* Input section */}
             <div className="rounded-2xl border border-zinc-800 bg-zinc-900/70 p-5 shadow-lg shadow-red-500/5 backdrop-blur">
               <div className="space-y-4">
                 <label className="block text-sm font-medium text-zinc-300">
@@ -160,8 +153,6 @@ export default function AnalyzePage() {
               )}
             </div>
 
-            {/* Helpful hints / empty state */}
-
             <div className="space-y-3 rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-950/90 to-zinc-900 p-5 text-sm text-zinc-400">
               <p className="font-medium text-zinc-200">What you’ll see here</p>
               <ul className="list-disc space-y-1 pl-5">
@@ -177,7 +168,6 @@ export default function AnalyzePage() {
             </div>
           </div>
 
-          {/* Right: Analysis panels (driven by data when available) */}
           <div className="space-y-6">
             <div
               className="rounded-2xl border border-zinc-800 bg-zinc-900/80 
