@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { slideUp } from '@/lib/animations'
+import Link from 'next/link'
 
 export function CTASection() {
   return (
@@ -24,7 +25,7 @@ export function CTASection() {
 
         <div className="flex flex-col gap-4 sm:flex-row justify-center sm:gap-4">
           <Button size="lg" className="gap-2">
-            Start Free Trial <ArrowRight className="h-4 w-4" />
+            <Link href="/analyze" className='flex items-center gap-2'>Start Free Trial <ArrowRight className="h-4 w-4" /></Link>
           </Button>
           <Button
             size="lg"
