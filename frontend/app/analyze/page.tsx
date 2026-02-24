@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -13,17 +13,48 @@ type RiskScore = {
   breakdown: Record<string, number | string>;
 };
 
+type Function = {
+  name: string;
+  stateMutability: string;
+  inputs: string[];
+  outputs: string[];
+};
+
+type AccessControl = {
+  isOwnable: boolean;
+  hasOnlyOwnerModifier: boolean;
+  hasOwnerFunction: boolean;
+  hasRenounceOwnership: boolean;
+  hasTransferOwnership: boolean;
+};
+
+type Upgradeability = {
+  isProxy: boolean;
+  pattern: string | null;
+  usesDelegatecall: boolean;
+};
+
+type RiskAnalysis = {
+  usesDelegatecall: boolean;
+  usesLowLevelCall: boolean;
+  usesTxOrigin: boolean;
+  usesSelfDestruct: boolean;
+  hasReentrancyGuard: boolean;
+  externalCallCount: number;
+}
+
 type AnalyzeResponse = {
   name: string;
-  functions: any[];
-  accessControl: any;
-  upgradeability: any;
-  riskAnalysis: any;
+  functions: Function;
+  accessControl: AccessControl;
+  upgradeability: Upgradeability;
+  riskAnalysis: RiskAnalysis;
   riskScore: RiskScore;
 };
 
+
+
 const API_BASE_URL =process.env.NEXT_PUBLIC_API_BASE_URL;
-console.log(API_BASE_URL);
 
 export default function AnalyzePage() {
   const [address, setAddress] = useState("");
@@ -32,6 +63,23 @@ export default function AnalyzePage() {
   const [error, setError] = useState<string | null>(null);
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [displayedText, setDisplayedText] = useState<string | null>(null);
+
+  useEffect(() => {
+    if(!aiExplanation) return;
+
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayedText((prev) => prev ? prev + aiExplanation[i] : aiExplanation[i]);
+      i++;
+
+      if(i >= aiExplanation.length) {
+        clearInterval(interval);
+      }
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [aiExplanation]);
 
 
   async function handleAnalyze() {
@@ -45,7 +93,7 @@ export default function AnalyzePage() {
     setError(null);
     setData(null);
     setAiExplanation(null);
-
+    setDisplayedText(null);
     try {
       const res = await axios.get<AnalyzeResponse>(
         `${API_BASE_URL}/api/contract/${trimmed}`,
@@ -271,7 +319,7 @@ export default function AnalyzePage() {
 
             {aiExplanation ? (
               <div className="rounded-xl border border-zinc-800 bg-zinc-950/80 p-4 text-sm text-zinc-200 whitespace-pre-wrap">
-                {aiExplanation}
+                {displayedText}
               </div>
             ) : (
               <p className="text-sm text-zinc-500">
