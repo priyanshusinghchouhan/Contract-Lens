@@ -7,6 +7,8 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
 import { AnimatedGrid } from "@/components/landing/animated-grid";
 import { useRef } from "react";
+import { motion } from "framer-motion";
+import { slideUp } from "@/lib/animations";
 
 type RiskScore = {
   score: number;
@@ -157,8 +159,8 @@ export default function AnalyzePage() {
       <Navbar />
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 pt-28 pb-16 sm:px-6 lg:px-8">
-        <section className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
-          <div className="space-y-8">
+        <motion.section initial="hidden" animate="visible" variants={slideUp} className="grid gap-10 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] items-start">
+          <motion.div variants={slideUp} custom={1} className="space-y-8">
             <div className="space-y-3">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
                 Analyze a Smart Contract
@@ -225,13 +227,13 @@ export default function AnalyzePage() {
                 </li>
               </ul>
             </div>
-          </div>
+          </motion.div>
 
           <div className="space-y-6">
-            <div
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/80 
-                p-6 min-h-56 shadow-lg shadow-red-500/5 
-                flex items-center justify-center"
+            <motion.div
+              variants={slideUp}
+              custom={2}
+              className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 min-h-56 shadow-lg shadow-red-500/5 flex items-center justify-center"
             >
               <div className="flex flex-col items-center text-center gap-4">
                 <div>
@@ -265,9 +267,9 @@ export default function AnalyzePage() {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 max-h-59 overflow-auto hide-scrollbar">
+            <motion.div variants={slideUp} custom={3} className="rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 max-h-59 overflow-auto hide-scrollbar">
               <h2 className="text-lg font-semibold">Risk breakdown</h2>
               <p className="mt-1 text-xs text-zinc-500 ">
                 Individual dimensions that contribute to the overall score.
@@ -300,10 +302,10 @@ export default function AnalyzePage() {
                   </ul>
                 </div>
               )}
-            </div>
+            </motion.div>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 w-272 bg-zinc-900/80 p-6 space-y-4">
+          <motion.div variants={slideUp} custom={4} className="rounded-2xl border border-zinc-800 w-272 bg-zinc-900/80 p-6 space-y-4">
             <div className="flex items-center justify-between gap-4">
               <div>
                 <h2 className="text-lg font-semibold">AI explanation</h2>
@@ -339,8 +341,8 @@ export default function AnalyzePage() {
                 contract.
               </p>
             )}
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         <footer className="mt-16 border-t border-zinc-800 pt-8 text-center text-xs text-zinc-500">
           <p>
