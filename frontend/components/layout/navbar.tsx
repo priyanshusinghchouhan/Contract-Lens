@@ -3,20 +3,19 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Shield, Moon, Sun } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { Shield } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Github } from '@/components/ui/github'
 
 export function Navbar() {
-  const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => setMounted(true), [])
 
   const navItems = [
+    { label: 'Home', href: '/' },
     { label: 'Features', href: '#features' },
     { label: 'How it works', href: '#how-it-works' },
-    { label: 'Pricing', href: '#pricing' },
     { label: 'Contact', href: '#contact' },
   ]
 
@@ -57,7 +56,9 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
       
-          <Button className="hidden sm:flex">Get Started</Button>
+          <Button className="hidden sm:flex">
+            <Github />
+            <a href="https://github.com/priyanshusinghchouhan/Contract-Lens" target='blank'>View on GitHub</a></Button>
         </div>
       </nav>
     </header>
