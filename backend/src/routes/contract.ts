@@ -1,5 +1,5 @@
 import { Router } from "express";
-import {isAddress} from "ethers";
+import { isAddress } from "ethers";
 import { fetchContractFromExplorer } from "../services/fetchContractFromExplorer.js";
 import { parseABI } from "../services/parser.js";
 import { analyzeAccessControl } from "../services/analyzer.js";
@@ -14,7 +14,7 @@ const router: Router = Router();
 
 function containsBusinessLogic(abi: ABI) {
   const functionNames = abi
-    .filter((item):item is ABIFunction => item.type === "function")
+    .filter((item): item is ABIFunction => item.type === "function")
     .map((f) => f.name);
 
   return (
@@ -25,13 +25,15 @@ function containsBusinessLogic(abi: ABI) {
   );
 }
 
-
 async function resolveFinalImplementation(address: string, chainId: number) {
   let current = await fetchContractFromExplorer(address, chainId);
   if (!current) return null;
 
   while (current.proxy && current.implementations) {
-    const next = await fetchContractFromExplorer(current.implementations, current.chainId);
+    const next = await fetchContractFromExplorer(
+      current.implementations,
+      current.chainId,
+    );
     if (!next) break;
 
     if (containsBusinessLogic(next.abi)) {
@@ -44,8 +46,6 @@ async function resolveFinalImplementation(address: string, chainId: number) {
   return current;
 }
 
-
-
 router.get("/:address", async (req, res) => {
   try {
     const { address } = req.params;
@@ -55,13 +55,24 @@ router.get("/:address", async (req, res) => {
     }
 
     const detected = await detectChainAndFetch(address);
-    if (!detected) return 404;
 
-    console.log("chain", detected.chainId);
+    if (detected.type === "NOT_FOUND") {
+      return res.status(404).json({
+        error: "Address is not a smart contract on supported chains.",
+      });
+    }
+
+    if (detected.type === "NOT_VERIFIED") {
+      return res.status(400).json({
+        error: "Contract exists but is not verified on explorer.",
+      });
+    }
+
+    console.log("chain", detected.data.chainId);
 
     const contractData = await resolveFinalImplementation(
       address,
-      detected.chainId
+      detected.data.chainId,
     );
 
     if (!contractData) {
@@ -77,7 +88,7 @@ router.get("/:address", async (req, res) => {
     const upgradeability = detectUpgradeability(
       abi,
       sourceCode,
-      contractData.proxy
+      contractData.proxy,
     );
     const riskAnalysis = analyzeRisks(sourceCode);
     const { score, level, breakdown } = calculateRiskScore(riskAnalysis);
@@ -110,15 +121,27 @@ router.post("/:address/explain", async (req, res) => {
     }
 
     const detected = await detectChainAndFetch(address);
-    if (!detected) return 404;
+    if (!detected || detected.type === "NOT_FOUND") {
+      return res.status(404).json({
+        error: "Address is not a smart contract on supported chains.",
+      });
+    }
+
+    if (detected.type === "NOT_VERIFIED") {
+      return res.status(400).json({
+        error: "Contract exists but is not verified on explorer.",
+      });
+    }
 
     const contractData = await resolveFinalImplementation(
       address,
-      detected.chainId
+      detected.data.chainId,
     );
 
     if (!contractData) {
-      return res.status(404).json({ error: "Contract not found or not verified" });
+      return res
+        .status(404)
+        .json({ error: "Contract not found or not verified" });
     }
 
     const { contractName, abi, sourceCode } = contractData;
@@ -128,7 +151,7 @@ router.post("/:address/explain", async (req, res) => {
     const upgradeability = detectUpgradeability(
       abi,
       sourceCode,
-      contractData.proxy
+      contractData.proxy,
     );
     const riskAnalysis = analyzeRisks(sourceCode);
     const { score, level, breakdown } = calculateRiskScore(riskAnalysis);
@@ -147,7 +170,6 @@ router.post("/:address/explain", async (req, res) => {
     });
 
     return res.json({ explanation });
-
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: "Internal Server Error" });
