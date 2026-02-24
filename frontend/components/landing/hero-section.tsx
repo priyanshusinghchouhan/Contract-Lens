@@ -39,7 +39,7 @@ export function HeroSection() {
                 custom={1}
                 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
               >
-                <span className="block text-white">Intelligent Security for</span>
+                <span className="block text-white">Deteministic Analysis of</span>
                 <span className="block bg-gradient-to-r from-red-500 via-red-400 to-orange-500 bg-clip-text text-transparent">
                   Smart Contracts
                 </span>
@@ -50,7 +50,7 @@ export function HeroSection() {
                 custom={2}
                 className="mx-auto max-w-2xl text-lg text-zinc-400 sm:text-xl"
               >
-                Analyze, audit, and understand smart contracts with deterministic risk assessment powered by AI. Protect your investments with confidence.
+                Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.
               </motion.p>
             </div>
 
@@ -72,7 +72,6 @@ export function HeroSection() {
               </Button>
             </motion.div>
 
-            {/* Trust indicators */}
             <motion.div
               variants={slideUp}
               custom={4}
