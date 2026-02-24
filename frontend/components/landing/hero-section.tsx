@@ -5,6 +5,7 @@ import { ArrowRight, Play } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProductPreview } from './product-preview'
 import { slideUp, slideDown, fadeIn } from '@/lib/animations'
+import Link from 'next/link';
 
 export function HeroSection() {
   return (
@@ -59,8 +60,8 @@ export function HeroSection() {
               custom={3}
               className="flex flex-col gap-4 sm:flex-row justify-center pt-4"
             >
-              <Button size="lg" className="gap-2">
-                Get Started <ArrowRight className="h-4 w-4" />
+              <Button size="lg" className="gap-2" asChild>
+                <Link href="/analyze" className='flex items-center gap-2'>Get Started <ArrowRight className=" h-4 w-4" /></Link>
               </Button>
               <Button
                 size="lg"
