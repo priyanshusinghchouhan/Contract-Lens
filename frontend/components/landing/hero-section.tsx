@@ -68,7 +68,7 @@ export function HeroSection() {
                 variant="outline"
                 className="gap-2 border-zinc-700 text-white hover:bg-zinc-900 hover:border-zinc-600"
               >
-                <a href="https://x.com/priyansu_twt/status/2026536106049810550" target='blank' className='flex items-center gap-2'><Play className="h-4 w-4" /> Watch Demo</a>
+                <a href="https://x.com/priyansu_twt/status/2026536106049810550" target='_blank' rel="noopener noreferrer" className='flex items-center gap-2'><Play className="h-4 w-4" /> Watch Demo</a>
               </Button>
             </motion.div>
 
