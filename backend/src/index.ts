@@ -9,8 +9,8 @@ const app = express();
 
 app.use(cors({
   origin:[
-    'https://contractlens.priyanshuchouhan.xyz/',
-    'frontend-six-gamma-89.vercel.app',
+    'https://contractlens.priyanshuchouhan.xyz',
+    'https://frontend-six-gamma-89.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000'
   ]
