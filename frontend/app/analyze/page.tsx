@@ -9,6 +9,19 @@ import { AnimatedGrid } from "@/components/landing/animated-grid";
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import { slideUp } from "@/lib/animations";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "ContractLens - Deteministic Analysis of Smart Contracts",
+  description:
+    "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
+  openGraph: {
+    title: "ContractLens - Deteministic Analysis of Smart Contracts",
+    description:
+      "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
+    type: "website",
+  },
+};
 
 type RiskScore = {
   score: number;
