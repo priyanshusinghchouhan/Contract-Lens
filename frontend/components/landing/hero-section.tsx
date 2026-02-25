@@ -63,13 +63,17 @@ export function HeroSection() {
               <Button size="lg" className="gap-2" asChild>
                 <Link href="/analyze" className='flex items-center gap-2'>Get Started <ArrowRight className=" h-4 w-4" /></Link>
               </Button>
-              <Button
+
+              <a href="https://x.com/priyansu_twt/status/2026536106049810550" target='_blank' rel="noopener noreferrer" className='flex items-center gap-2'>
+                <Button
                 size="lg"
                 variant="outline"
                 className="gap-2 border-zinc-700 text-white hover:bg-zinc-900 hover:border-zinc-600"
               >
-                <a href="https://x.com/priyansu_twt/status/2026536106049810550" target='_blank' rel="noopener noreferrer" className='flex items-center gap-2'><Play className="h-4 w-4" /> Watch Demo</a>
+                <Play className="h-4 w-4" /> Watch Demo
               </Button>
+              </a>
+              
             </motion.div>
 
             <motion.div
