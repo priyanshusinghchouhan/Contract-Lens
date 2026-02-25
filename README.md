@@ -1,4 +1,20 @@
-# ContractLens
+# ⚡️ ContractLens 
+
+<div align="center">
+
+**A Deteministic Analyzer of Smart Contracts**
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+![Ethereum](https://img.shields.io/badge/Ethereum-3C3C3D?logo=ethereum&logoColor=white)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+[🌐 Live ](https://contractlens.priyanshuchouhan.xyz/) • [✏️  Demo](https://x.com/priyansu_twt/status/2026536106049810550)
+
+</div>
+
+# ✨ Overview
 
 ContractLens is a full‑stack web app that lets you paste an EVM contract address and instantly get:
 
@@ -7,12 +23,6 @@ ContractLens is a full‑stack web app that lets you paste an EVM contract addre
 - A plain‑English AI explanation of what the contract does and why it might be risky
 
 It’s built for security‑minded users who want quick signal without reading the entire Solidity codebase.
-
----
-
-## 🌐 Live demo
-
-[Live Demo](https://your-live-demo-url.example)
 
 ---
 
@@ -111,18 +121,12 @@ You can turn this into a proper diagram later:
 - Node.js (LTS)
 - pnpm (recommended; project uses `packageManager: pnpm@...`)
 
-### 1. Clone the repo
-
-git clone https://github.com/your-username/contractlens.git
-cd contractlens
-
-
 ## Setup Instructions
 
 1. Clone the repo and move in:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/priyanshusinghchouhan/Contract-Lens
 cd contractLens
 ```
 
@@ -135,8 +139,8 @@ cd frontend && pnpm install
 ```
 
 3. Configure environment variables:
-- Create `backend/.env` (see [backend README](/Users/priyanshusingh/Downloads/web3-apps-03/contractLens/backend/README.md))
-- Create `frontend/.env.local` (see [frontend README](/Users/priyanshusingh/Downloads/web3-apps-03/contractLens/frontend/README.md))
+- Create `backend/.env` 
+- Create `frontend/.env.local`
 
 4. Run backend:
 
@@ -200,9 +204,20 @@ contractLens/
 
 Add screenshots in this section later. Suggested images:
 - Landing page
-- Analyze page input + result
-- Risk score breakdown panel
+
+  <img width="1460" height="748" alt="image" src="https://github.com/user-attachments/assets/c56159bb-c6e6-49e5-93ee-80d4d406705d" />
+
+  <img width="1410" height="777" alt="image" src="https://github.com/user-attachments/assets/215eb345-9aaf-40d0-8310-b8e6dafd5d8e" />
+
+- Analyze page input + result + Risk score breakdown panel
+
+<img width="1446" height="783" alt="image" src="https://github.com/user-attachments/assets/1e3b2915-853e-4201-92f5-5766a1e17bf3" />
+
+<img width="1394" height="786" alt="image" src="https://github.com/user-attachments/assets/74bd0769-144c-43bb-a102-3df09e4323bb" />
+
 - AI explanation output
+
+  <img width="1397" height="769" alt="image" src="https://github.com/user-attachments/assets/5d5e85c4-3bd7-4f3f-8c86-2f58c1a83bcc" />
 
 ## Roadmap
 
