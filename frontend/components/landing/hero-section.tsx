@@ -39,7 +39,7 @@ export function HeroSection() {
                 custom={1}
                 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl"
               >
-                <span className="block text-white">Deteministic Analysis of</span>
+                <span className="block text-white">Deterministic Analysis of</span>
                 <span className="block bg-gradient-to-r from-red-500 via-red-400 to-orange-500 bg-clip-text text-transparent">
                   Smart Contracts
                 </span>
