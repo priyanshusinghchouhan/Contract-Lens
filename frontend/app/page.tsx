@@ -8,15 +8,7 @@ import { HowItWorks } from "@/components/landing/how-it-works";
 import { CTASection } from "@/components/landing/cta-section";
 
 export const metadata: Metadata = {
-  title: "ContractLens - Deteministic Analysis of Smart Contracts",
-  description:
-    "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
-  openGraph: {
-    title: "ContractLens - Deteministic Analysis of Smart Contracts",
-    description:
-      "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
-    type: "website",
-  },
+  title: "ContractLens - Deterministic Analyzer of Smart Contracts",
 };
 
 export default function Home() {
