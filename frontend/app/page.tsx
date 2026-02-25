@@ -7,10 +7,6 @@ import { SolutionSection } from "@/components/landing/solution-section";
 import { HowItWorks } from "@/components/landing/how-it-works";
 import { CTASection } from "@/components/landing/cta-section";
 
-export const metadata: Metadata = {
-  title: "ContractLens - Deterministic Analyzer of Smart Contracts",
-};
-
 export default function Home() {
   return (
     <main className="relative min-h-screen bg-black text-white">

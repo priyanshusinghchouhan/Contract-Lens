@@ -8,18 +8,8 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: {
-    default: "ContractLens",
-    template: "%s | ContractLens",
-  },
-  description:
-    "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
-  openGraph: {
-    title: "ContractLens",
-    description:
-      "Deterministic smart contract risk analysis and upgradeability detection.",
-    type: "website",
-  },
+  title: "ContractLens - Deteministic Analysis of Smart Contracts",
+  description: "Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.",
 };
 
 export default function RootLayout({
