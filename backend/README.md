@@ -1,4 +1,4 @@
-# Backend (ContractLens API)
+# 📝 Backend (ContractLens API)
 
 Express + TypeScript API that fetches verified contract metadata, runs deterministic analysis, and optionally generates an AI explanation.
 
@@ -33,7 +33,6 @@ PORT=5173
 ETHERSCAN_API_KEY=your_key
 ARBISCAN_API_KEY=your_key
 OPTIMISMSCAN_API_KEY=your_key
-BASESCAN_API_KEY=your_key
 POLYGONSCAN_API_KEY=your_key
 ANTHROPIC_API_KEY=your_key
 ```
@@ -59,7 +58,6 @@ pnpm start
 - Sepolia (`11155111`)
 - Arbitrum One (`42161`)
 - Optimism (`10`)
-- Base (`8453`)
 - Polygon (`137`)
 
 ## Deployment Notes (Railway)
