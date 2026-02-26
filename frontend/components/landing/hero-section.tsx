@@ -28,7 +28,7 @@ export function HeroSection() {
               className="mx-auto inline-block"
             >
               <div className="rounded-full border border-zinc-800 bg-zinc-900/50 px-4 py-2 text-sm text-zinc-300 backdrop-blur-sm">
-                ✨ Powered by Advanced AI Analysis
+                ✨ Powered by AI Explanation
               </div>
             </motion.div>
 
@@ -50,7 +50,7 @@ export function HeroSection() {
                 custom={2}
                 className="mx-auto max-w-2xl text-lg text-zinc-400 sm:text-xl"
               >
-                Analyze and understand smart contracts with deterministic risk assessment powered by AI. Power your learning.
+                Analyze and understand smart contracts with deterministic risk assessment. Power your learning using AI explanation.
               </motion.p>
             </div>
 
@@ -74,25 +74,6 @@ export function HeroSection() {
               </Button>
               </a>
               
-            </motion.div>
-
-            <motion.div
-              variants={slideUp}
-              custom={4}
-              className="flex items-center justify-center gap-8 pt-6 text-sm text-zinc-500"
-            >
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-                <span>256-bit Encryption</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-                <span>Real-time Analysis</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-                <span>Enterprise Grade</span>
-              </div>
             </motion.div>
           </motion.div>
 
