@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**A Deteministic Analyzer of Smart Contracts**
+**A Deteministic Analysis of Smart Contracts**
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
