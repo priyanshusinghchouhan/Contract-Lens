@@ -1,4 +1,4 @@
-# Frontend (ContractLens Web App)
+# ⚛️ Frontend (ContractLens Web App)
 
 Next.js frontend for contract analysis, risk visualization, and AI explanation display.
 
